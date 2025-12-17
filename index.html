@@ -147,11 +147,11 @@
         <label>Email Address</label>
         <input type="email" name="Email" required>
 
-        <label>General Admission Tickets</label>
-        <input type="number" name="GA Tickets" min="0" value="1">
-
-        <label>VIP Passes</label>
+        <label>VIP Seating</label>
         <input type="number" name="VIP Passes" min="0" value="0">
+
+        <label>Standard Seating</label>
+        <input type="number" name="GA Tickets" min="0" value="0">
 
         <button type="submit" id="submitBtn">CONFIRM RSVP</button>
     </form>
@@ -170,24 +170,56 @@
 
     form.addEventListener('submit', e => {
       e.preventDefault();
+
+      // 1. GET TICKET VALUES
+      // We parse them as integers (numbers) because HTML values are strings
+      const gaTickets = parseInt(form.elements['GA Tickets'].value);
+      const vipTickets = parseInt(form.elements['VIP Passes'].value);
+
+      // 2. VALIDATION CHECK
+      // If both are 0, stop everything and show error
+      if (gaTickets === 0 && vipTickets === 0) {
+          msg.innerHTML = "PLEASE SELECT AT LEAST ONE TICKET.";
+          msg.classList.add("error");
+          msg.classList.remove("success");
+          
+          // Clear the error message after 3 seconds
+          setTimeout(() => { 
+              msg.innerHTML = ""; 
+              msg.classList.remove("error");
+          }, 3000);
+          
+          return; // STOP HERE. Do not continue to Google.
+      }
+
+      // 3. IF VALID, PROCEED TO SUBMIT
       btn.innerText = "PROCESSING...";
       btn.disabled = true;
+      msg.innerHTML = ""; // Clear any previous errors
 
       fetch(scriptURL, { method: 'POST', body: new FormData(form)})
         .then(response => {
             msg.innerHTML = "RSVP CONFIRMED. SEE YOU THERE.";
+            msg.classList.remove("error");
             msg.classList.add("success");
             btn.innerText = "CONFIRM RSVP";
             btn.disabled = false;
             form.reset();
-            setTimeout(() => { msg.innerHTML = ""; }, 6000);
+            // Reset Standard Tickets back to 1 (optional, but good for UX)
+            form.elements['GA Tickets'].value = "1"; 
+            
+            setTimeout(() => { 
+                msg.innerHTML = ""; 
+                msg.classList.remove("success");
+            }, 6000);
         })
         .catch(error => {
             msg.innerHTML = "ERROR. PLEASE TRY AGAIN.";
+            msg.classList.remove("success");
             msg.classList.add("error");
             btn.innerText = "CONFIRM RSVP";
             btn.disabled = false;
-        })
+        });
     });
 </script>
 
