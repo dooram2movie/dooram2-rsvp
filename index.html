@@ -6,22 +6,32 @@
     <title>DOORAM 2 - Premiere RSVP</title>
     <style>
         /* 1. Dark Cinematic Theme Setup */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            color: #fff;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            /* Background Image with 50% Darkness Overlay */
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                        url('INSTA_POSTER_DOORAM.jpg'); /* Make sure image is in same folder */
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
+/* REPLACE YOUR EXISTING body { ... } WITH THIS: */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #fff;
+    min-height: 100vh;
+    
+    /* FLEXBOX SETTINGS */
+    display: flex;
+    justify-content: center; /* Center horizontally (Left/Right) */
+    align-items: flex-start; /* Start from the TOP (instead of middle) */
+    
+    /* SPACING */
+    padding-top: 80px;    /* Pushes the card down so Title is visible */
+    padding-bottom: 50px; /* Adds scrolling space at the bottom */
+    box-sizing: border-box;
+
+    /* BACKGROUND */
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                url('INSTA POSTER copy.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
 
         /* 2. The Glass Card Container */
         .container {
@@ -207,7 +217,7 @@
         <h3>Payment Required for Entry</h3>
         
         <div class="zelle-card">
-            <img src="IMG_6017_Small.png" alt="Zelle QR Code" class="qr-image" display: block; margin: 0 auto;">
+            <img src="IMG_6017_Small.png" alt="Zelle QR Code" class="qr-image">
             
             <div class="zelle-details">
                 <span class="zelle-label">SCAN TO PAY VIA ZELLE</span>
