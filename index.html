@@ -125,6 +125,54 @@
         .success { color: #4ade80; } /* Bright Green */
         .error { color: #ff4d4d; }   /* Bright Red */
 
+        /* PAYMENT FOOTER - CINEMATIC TICKET STYLE */
+.box-office {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px dashed rgba(255, 255, 255, 0.2); /* Tear-off ticket look */
+    text-align: center;
+}
+
+.box-office h3 {
+    font-size: 0.8rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+.zelle-card {
+    background: rgba(216, 0, 0, 0.1); /* Very faint red background */
+    border: 1px solid rgba(216, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.zelle-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #ccc;
+    margin-bottom: 5px;
+}
+
+.zelle-name {
+    display: block;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: white;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.zelle-number {
+    display: block;
+    font-family: 'Courier New', monospace; /* Digital/Typewriter look */
+    font-size: 1.3rem;
+    color: #d80000; /* Matches the main Title Red */
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
     </style>
 </head>
 <body>
@@ -154,6 +202,20 @@
         <input type="number" name="GA Tickets" min="0" value="0">
 
         <button type="submit" id="submitBtn">CONFIRM RSVP</button>
+
+        <div class="box-office">
+    <h3>Payment Required for Entry</h3>
+    
+    <div class="zelle-card">
+        <span class="zelle-label">PAY VIA ZELLE TO:</span>
+        <span class="zelle-name">Vimal Kumar</span>
+        <span class="zelle-number">+1 (478) 918-4220</span>
+    </div>
+    
+    <p style="font-size: 0.75rem; color: #666; margin-top: 10px; font-style: italic;">
+        *Please complete payment to secure your seats.
+    </p>
+</div>
     </form>
     <div id="msg"></div>
 </div>
