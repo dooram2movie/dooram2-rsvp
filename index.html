@@ -189,7 +189,6 @@ body {
 
 <div class="container">
     <h1>DOORAM 2</h1>
-    <img src="DOORAM_Title_Small.png" alt="Dooram Title" class="h1">
     <p class="subtitle">PREMIERE EVENT RSVP</p>
     
     <form name="submit-to-google-sheet">
@@ -234,6 +233,29 @@ body {
     <div id="msg"></div>
 </div>
 
+    <div class="box-office">
+    <h3>Payment Required for Entry</h3>
+
+    <div style="margin-bottom: 15px; font-size: 1.1rem; letter-spacing: 1px;">
+        TOTAL DUE: 
+        <span id="total-display" style="color: #d80000; font-family: 'Courier New', monospace; font-size: 1.8rem; font-weight: bold;">$0</span>
+    </div>
+    
+    <div class="zelle-card">
+        <img src="IMG_6017_Small.png" alt="Zelle QR Code" class="qr-image" style="width: 1.5in; height: 2in;">
+        
+        <div class="zelle-details">
+            <span class="zelle-label">SCAN TO PAY VIA ZELLE</span>
+            <span class="zelle-name">Vimal Kumar</span>
+            <span class="zelle-number">+1 (478) 918-4220</span>
+        </div>
+    </div>
+    
+    <p style="font-size: 0.75rem; color: #888; margin-top: 15px; font-style: italic;">
+        *Please complete payment to secure your seats.
+    </p>
+</div>
+
 <script>
     // -------------------------------------------------------------
     // REPLACE WITH YOUR GOOGLE APPS SCRIPT URL
@@ -243,56 +265,82 @@ body {
     const form = document.forms['submit-to-google-sheet'];
     const msg = document.getElementById("msg");
     const btn = document.getElementById("submitBtn");
+    
+    // NEW: Get elements for pricing
+    const gaSelect = form.elements['GA Tickets'];
+    const vipSelect = form.elements['VIP Passes'];
+    const totalDisplay = document.getElementById("total-display");
 
+    // -------------------------------------------------------
+    // PRICING LOGIC
+    // -------------------------------------------------------
+    function calculateTotal() {
+        const gaCount = parseInt(gaSelect.value) || 0;
+        const vipCount = parseInt(vipSelect.value) || 0;
+        
+        // Price: $15 for Standard, $25 for VIP
+        const totalAmount = (gaCount * 15) + (vipCount * 25);
+        
+        // Update the display text
+        totalDisplay.innerText = "$" + totalAmount;
+    }
+
+    // Listen for changes on the dropdowns immediately
+    gaSelect.addEventListener('change', calculateTotal);
+    vipSelect.addEventListener('change', calculateTotal);
+
+    // Run once on load to set initial price
+    calculateTotal();
+
+    // -------------------------------------------------------
+    // SUBMISSION LOGIC
+    // -------------------------------------------------------
     form.addEventListener('submit', e => {
       e.preventDefault();
 
-      // 1. GET TICKET VALUES
-      // We parse them as integers (numbers) because HTML values are strings
-      const gaTickets = parseInt(form.elements['GA Tickets'].value);
-      const vipTickets = parseInt(form.elements['VIP Passes'].value);
+      // 1. GET VALUES
+      const email = form.elements['Email'].value.trim();
+      const gaTickets = parseInt(gaSelect.value);
+      const vipTickets = parseInt(vipSelect.value);
 
-      // 2. VALIDATION CHECK
-      // If both are 0, stop everything and show error
-      if (gaTickets === 0 && vipTickets === 0) {
-          msg.innerHTML = "PLEASE SELECT AT LEAST ONE TICKET.";
-          msg.classList.add("error");
-          msg.classList.remove("success");
-          
-          // Clear the error message after 3 seconds
-          setTimeout(() => { 
-              msg.innerHTML = ""; 
-              msg.classList.remove("error");
-          }, 3000);
-          
-          return; // STOP HERE. Do not continue to Google.
+      // 2. EMAIL VALIDATION
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+          msg.innerHTML = "PLEASE ENTER A VALID EMAIL ADDRESS.";
+          msg.className = "error"; 
+          setTimeout(() => { msg.innerHTML = ""; msg.className = ""; }, 3000);
+          return; 
       }
 
-      // 3. IF VALID, PROCEED TO SUBMIT
+      // 3. TICKET VALIDATION
+      if (gaTickets === 0 && vipTickets === 0) {
+          msg.innerHTML = "PLEASE SELECT AT LEAST ONE TICKET.";
+          msg.className = "error";
+          setTimeout(() => { msg.innerHTML = ""; msg.className = ""; }, 3000);
+          return; 
+      }
+
+      // 4. SUBMIT TO GOOGLE
       btn.innerText = "PROCESSING...";
       btn.disabled = true;
-      msg.innerHTML = ""; // Clear any previous errors
 
       fetch(scriptURL, { method: 'POST', body: new FormData(form)})
         .then(response => {
-            msg.innerHTML = "RSVP CONFIRMED. SEE YOU THERE.";
-            msg.classList.remove("error");
-            msg.classList.add("success");
+            msg.innerHTML = "RSVP CONFIRMED! SEE YOU THERE.";
+            msg.className = "success";
             btn.innerText = "CONFIRM RSVP";
             btn.disabled = false;
             form.reset();
-            // Reset Standard Tickets back to 1 (optional, but good for UX)
-            form.elements['GA Tickets'].value = "1"; 
             
-            setTimeout(() => { 
-                msg.innerHTML = ""; 
-                msg.classList.remove("success");
-            }, 6000);
+            // Reset Dropdowns and Price
+            form.elements['GA Tickets'].value = "1"; 
+            calculateTotal(); // Reset price back to $15
+            
+            setTimeout(() => { msg.innerHTML = ""; msg.className = ""; }, 6000);
         })
         .catch(error => {
-            msg.innerHTML = "ERROR. PLEASE TRY AGAIN.";
-            msg.classList.remove("success");
-            msg.classList.add("error");
+            msg.innerHTML = "ERROR! PLEASE TRY AGAIN.";
+            msg.className = "error";
             btn.innerText = "CONFIRM RSVP";
             btn.disabled = false;
         });
