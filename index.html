@@ -211,27 +211,9 @@ body {
         <label>Standard Seating</label>
         <input type="number" name="GA Tickets" min="0" value="0">
 
-        <button type="submit" id="submitBtn">CONFIRM RSVP</button>
+        <input type="hidden" name="Total Amt Due" id="hidden-total">
 
-<div class="box-office">
-        <h3>Payment Required for Entry</h3>
-        
-        <div class="zelle-card">
-            <img src="IMG_6017_Small.png" alt="Zelle QR Code" class="qr-image" style="width: 1.5in; height: 2in;">
-            
-            <div class="zelle-details">
-                <span class="zelle-label">SCAN TO PAY VIA ZELLE</span>
-                <span class="zelle-name">Vimal Kumar</span>
-                <span class="zelle-number">+1 (478) 918-4220</span>
-            </div>
-        </div>
-        
-        <p style="font-size: 0.75rem; color: #888; margin-top: 15px; font-style: italic;">
-            *Please complete payment to secure your seats.
-        </p>
-    </form>
-    <div id="msg"></div>
-</div>
+        <button type="submit" id="submitBtn">CONFIRM RSVP</button>
 
     <div class="box-office">
     <h3>Payment Required for Entry</h3>
@@ -247,7 +229,7 @@ body {
         <div class="zelle-details">
             <span class="zelle-label">SCAN TO PAY VIA ZELLE</span>
             <span class="zelle-name">Vimal Kumar</span>
-            <span class="zelle-number">+1 (478) 918-4220</span>
+            <span class="zelle-number">478-918-4220</span>
         </div>
     </div>
     
@@ -270,19 +252,24 @@ body {
     const gaSelect = form.elements['GA Tickets'];
     const vipSelect = form.elements['VIP Passes'];
     const totalDisplay = document.getElementById("total-display");
+    const hiddenTotalInput = document.getElementById("hidden-total");
 
     // -------------------------------------------------------
     // PRICING LOGIC
     // -------------------------------------------------------
-    function calculateTotal() {
+   function calculateTotal() {
         const gaCount = parseInt(gaSelect.value) || 0;
         const vipCount = parseInt(vipSelect.value) || 0;
         
         // Price: $15 for Standard, $25 for VIP
         const totalAmount = (gaCount * 15) + (vipCount * 25);
         
-        // Update the display text
+        // 1. Update the Visual Display (for the user)
         totalDisplay.innerText = "$" + totalAmount;
+
+        // 2. Update the Hidden Input (for the Google Sheet)
+        // We save it as a simple number or text like "$45"
+        hiddenTotalInput.value = "$" + totalAmount; 
     }
 
     // Listen for changes on the dropdowns immediately
@@ -333,7 +320,7 @@ body {
             form.reset();
             
             // Reset Dropdowns and Price
-            form.elements['GA Tickets'].value = "1"; 
+            form.elements['GA Tickets'].value = "0"; 
             calculateTotal(); // Reset price back to $15
             
             setTimeout(() => { msg.innerHTML = ""; msg.className = ""; }, 6000);
