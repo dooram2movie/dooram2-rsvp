@@ -4,59 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DOORAM 2 - Premiere RSVP</title>
-    <style>
-        /* 1. Dark Cinematic Theme Setup */
-/* REPLACE YOUR EXISTING body { ... } WITH THIS: */
-
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color: #fff;
-    min-height: 100vh;
-    
-    /* FLEXBOX SETTINGS */
-    display: flex;
-    justify-content: center; /* Center horizontally (Left/Right) */
-    align-items: flex-start; /* Start from the TOP (instead of middle) */
-    
-    /* SPACING */
-    padding-top: 80px;    /* Pushes the card down so Title is visible */
-    padding-bottom: 50px; /* Adds scrolling space at the bottom */
-    box-sizing: border-box;
-
-    /* BACKGROUND */
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                url('INSTA_POSTER_DOORAM.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-}
-
-        /* 2. The Glass Card Container */
-        .container {
-            background: rgba(0, 0, 0, 0.75); /* Dark semi-transparent black */
-            backdrop-filter: blur(8px);       /* Blur effect behind the card */
-            padding: 40px;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
-            width: 100%;
-            max-width: 420px;
+<style>
+        /* 1. DARK CINEMATIC THEME */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center; /* Center Horizontally */
+            align-items: flex-start; /* Start from Top */
+            padding-top: 80px;      /* Push down for title visibility */
+            padding-bottom: 50px;
+            box-sizing: border-box;
+            
+            /* Background Image */
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('INSTA_POSTER_DOORAM.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
 
-        /* 3. Typography */
+        /* 2. GLASS CARD CONTAINER */
+        .container {
+            background: rgba(0, 0, 0, 0.85); /* Slightly darker for better video contrast */
+            backdrop-filter: blur(8px);
+            padding: 40px;
+            margin: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            width: 100%;
+            max-width: 450px; /* Slightly wider for video */
+            transition: opacity 0.5s ease;
+        }
+
+        /* Utility to hide elements */
+        .hidden {
+            display: none !important;
+        }
+
+        /* 3. TYPOGRAPHY */
         h1 {
             text-align: center;
-            margin-top: 0;
-            margin-bottom: 10px;
+            margin: 0 0 10px 0;
             font-size: 3rem;
             text-transform: uppercase;
             font-weight: 900;
-            /* Matching the Red Title from your Poster */
-            color: #d80000; 
+            color: #d80000;
             text-shadow: 0 0 10px rgba(180, 0, 0, 0.6);
             letter-spacing: 2px;
+            line-height: 1;
         }
         
         p.subtitle {
@@ -67,7 +67,7 @@ body {
             letter-spacing: 1px;
         }
 
-        /* 4. Form Styling */
+        /* 4. FORM FIELDS */
         label {
             display: block;
             margin-bottom: 8px;
@@ -77,7 +77,7 @@ body {
             letter-spacing: 0.5px;
         }
 
-        input {
+        input, select {
             width: 100%;
             padding: 12px;
             margin-bottom: 20px;
@@ -89,19 +89,28 @@ body {
             box-sizing: border-box;
             transition: 0.3s;
         }
-
-        input:focus {
+        
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px top 50%;
+            background-size: 12px auto;
+        }
+        select option { background-color: #222; }
+        input:focus, select:focus {
             outline: none;
             border-color: #d80000;
             background: rgba(255, 255, 255, 0.1);
             box-shadow: 0 0 8px rgba(216, 0, 0, 0.3);
         }
 
-        /* 5. The "Red" Action Button */
+        /* 5. BUTTONS */
         button {
             width: 100%;
             padding: 15px;
-            background-color: #d80000; /* Deep Red */
+            background-color: #d80000;
             color: white;
             border: none;
             border-radius: 4px;
@@ -111,79 +120,66 @@ body {
             cursor: pointer;
             letter-spacing: 1.5px;
             transition: all 0.3s ease;
-            margin-top: 10px;
+            margin-top: 5px;
         }
-
         button:hover {
             background-color: #ff1a1a;
             box-shadow: 0 0 20px rgba(216, 0, 0, 0.6);
             transform: translateY(-2px);
         }
+        button:disabled { background-color: #555; cursor: not-allowed; transform: none; }
 
-        button:disabled {
-            background-color: #555;
-            cursor: not-allowed;
-            transform: none;
-        }
+        /* 6. MESSAGES */
+        #msg { text-align: center; margin-top: 15px; font-size: 0.9rem; min-height: 20px; }
+        .error { color: #ff4d4d; }
 
-        #msg {
+        /* 7. PAYMENT SECTION */
+        .box-office {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed rgba(255, 255, 255, 0.2);
             text-align: center;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            height: 20px;
         }
-        .success { color: #4ade80; } /* Bright Green */
-        .error { color: #ff4d4d; }   /* Bright Red */
+        .box-office h3 { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; }
+        .zelle-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .qr-image { width: 150px; height: auto; border-radius: 8px; border: 3px solid white; margin-bottom: 15px; }
+        .zelle-label { display: block; font-size: 0.7rem; color: #aaa; margin-bottom: 4px; text-transform: uppercase; }
+        .zelle-name { display: block; font-weight: bold; font-size: 1.1rem; color: white; margin-bottom: 5px; text-transform: uppercase; }
+        .zelle-number { display: block; font-family: 'Courier New', monospace; font-size: 1.2rem; color: #d80000; font-weight: bold; letter-spacing: 1px; }
 
-        /* PAYMENT FOOTER - CINEMATIC TICKET STYLE */
-.box-office {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 2px dashed rgba(255, 255, 255, 0.2); /* Tear-off ticket look */
-    text-align: center;
-}
-
-.box-office h3 {
-    font-size: 0.8rem;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 15px;
-}
-
-.zelle-card {
-    background: rgba(216, 0, 0, 0.1); /* Very faint red background */
-    border: 1px solid rgba(216, 0, 0, 0.3);
-    padding: 15px;
-    border-radius: 8px;
-}
-
-.zelle-label {
-    display: block;
-    font-size: 0.8rem;
-    color: #ccc;
-    margin-bottom: 5px;
-}
-
-.zelle-name {
-    display: block;
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: white;
-    margin-bottom: 5px;
-    text-transform: uppercase;
-}
-
-.zelle-number {
-    display: block;
-    font-family: 'Courier New', monospace; /* Digital/Typewriter look */
-    font-size: 1.3rem;
-    color: #d80000; /* Matches the main Title Red */
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-    </style>
+        /* 8. SUCCESS SCREEN STYLES */
+        .success-content { text-align: center; }
+        .success-title { color: #d80000; font-size: 2rem; margin-bottom: 10px; font-weight: 900; text-transform: uppercase; }
+        .success-text { color: #ddd; margin-bottom: 20px; line-height: 1.5; font-size: 1rem; }
+        .email-alert { background: rgba(216, 0, 0, 0.2); border: 1px solid #d80000; padding: 10px; border-radius: 6px; margin-bottom: 25px; color: #fff; font-size: 0.9rem; }
+        
+        /* Video Container (Responsive 16:9) */
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 1px solid #444;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            margin-top: 20px;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+</style>
 </head>
 <body>
 
@@ -238,6 +234,36 @@ body {
     <p style="font-size: 0.75rem; color: #888; margin-top: 15px; font-style: italic;">
         *Please complete payment to secure your seats.
     </p>
+</div>
+
+<div class="container hidden" id="success-card">
+    <div class="success-content">
+        <h1 class="success-title">THANK YOU <span id="customer-name-display"></span>!</h1>
+        
+        <p class="success-text">
+            We are thrilled to have you join us for the premiere of <strong>DOORAM 2</strong>.
+        </p>
+        
+        <div class="email-alert">
+            ✓ A confirmation email with payment details has been sent to your inbox.
+        </div>
+
+        <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 10px;">
+            While you wait, watch the official trailer:
+        </p>
+
+        <div class="video-wrapper">
+            <iframe 
+                width="560" 
+                height="315" 
+                src="https://www.youtube.com/embed/k_rOZQAxv0E?si=WyCM7MQNNvcRQiCz?rel=0" 
+                title="Dooram 2 Trailer" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
 </div>
 
 <script>
