@@ -272,54 +272,46 @@
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzLoKlnAMKtW6zoNErArSMJWQedXm88nvUunUCVTyqc3Rr0bcy6fP8ewJQjqKr-k-BO/exec';
     // -------------------------------------------------------------
 
-    const form = document.forms['submit-to-google-sheet'];
+   const form = document.forms['submit-to-google-sheet'];
     const msg = document.getElementById("msg");
     const btn = document.getElementById("submitBtn");
     
-    // NEW: Get elements for pricing
+    // Cards
+    const rsvpCard = document.getElementById("rsvp-card");
+    const successCard = document.getElementById("success-card");
+    const nameDisplay = document.getElementById("customer-name-display");
+
+    // Inputs
     const gaSelect = form.elements['GA Tickets'];
     const vipSelect = form.elements['VIP Passes'];
     const totalDisplay = document.getElementById("total-display");
     const hiddenTotalInput = document.getElementById("hidden-total");
 
-    // -------------------------------------------------------
     // PRICING LOGIC
-    // -------------------------------------------------------
-   function calculateTotal() {
+    function calculateTotal() {
         const gaCount = parseInt(gaSelect.value) || 0;
         const vipCount = parseInt(vipSelect.value) || 0;
-        
-        // Price: $15 for Standard, $25 for VIP
         const totalAmount = (gaCount * 15) + (vipCount * 25);
-        
-        // 1. Update the Visual Display (for the user)
         totalDisplay.innerText = "$" + totalAmount;
-
-        // 2. Update the Hidden Input (for the Google Sheet)
-        // We save it as a simple number or text like "$45"
         hiddenTotalInput.value = "$" + totalAmount; 
     }
-
-    // Listen for changes on the dropdowns immediately
     gaSelect.addEventListener('change', calculateTotal);
     vipSelect.addEventListener('change', calculateTotal);
-
-    // Run once on load to set initial price
     calculateTotal();
 
-    // -------------------------------------------------------
     // SUBMISSION LOGIC
-    // -------------------------------------------------------
     form.addEventListener('submit', e => {
       e.preventDefault();
 
-      // 1. GET VALUES
+      // 1. CAPTURE NAME FOR THANK YOU SCREEN
+      const firstName = form.elements['First Name'].value;
+
+      // 2. VALIDATION
       const email = form.elements['Email'].value.trim();
       const gaTickets = parseInt(gaSelect.value);
       const vipTickets = parseInt(vipSelect.value);
-
-      // 2. EMAIL VALIDATION
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
       if (!emailPattern.test(email)) {
           msg.innerHTML = "PLEASE ENTER A VALID EMAIL ADDRESS.";
           msg.className = "error"; 
@@ -327,7 +319,6 @@
           return; 
       }
 
-      // 3. TICKET VALIDATION
       if (gaTickets === 0 && vipTickets === 0) {
           msg.innerHTML = "PLEASE SELECT AT LEAST ONE TICKET.";
           msg.className = "error";
@@ -335,29 +326,29 @@
           return; 
       }
 
-      // 4. SUBMIT TO GOOGLE
+      // 3. SUBMIT
       btn.innerText = "PROCESSING...";
       btn.disabled = true;
 
       fetch(scriptURL, { method: 'POST', body: new FormData(form)})
         .then(response => {
-            msg.innerHTML = "RSVP CONFIRMED! SEE YOU THERE.";
-            msg.className = "success";
-            btn.innerText = "CONFIRM RSVP";
-            btn.disabled = false;
-            form.reset();
+            // SUCCESS! 
+            // 1. Update the name in the second card
+            nameDisplay.innerText = firstName.toUpperCase();
             
-            // Reset Dropdowns and Price
-            form.elements['GA Tickets'].value = "0"; 
-            calculateTotal(); // Reset price back to $15
+            // 2. Hide Form Card, Show Success Card
+            rsvpCard.classList.add("hidden");
+            successCard.classList.remove("hidden");
             
-            setTimeout(() => { msg.innerHTML = ""; msg.className = ""; }, 6000);
+            // 3. Scroll to top so they see the message
+            window.scrollTo(0,0);
         })
         .catch(error => {
             msg.innerHTML = "ERROR! PLEASE TRY AGAIN.";
             msg.className = "error";
             btn.innerText = "CONFIRM RSVP";
             btn.disabled = false;
+            console.error(error);
         });
     });
 </script>
