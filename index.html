@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DOORAM 2 - Premiere RSVP</title>
-<style>
+    <style>
         /* 1. DARK CINEMATIC THEME */
         body {
             margin: 0;
@@ -179,61 +179,83 @@
             width: 100%;
             height: 100%;
         }
-</style>
+    </style>
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="rsvp-card">
     <h1>DOORAM 2</h1>
     <p class="subtitle">PREMIERE EVENT RSVP</p>
     
     <form name="submit-to-google-sheet">
         
-        <label>First Name</label>
-        <input type="text" name="First Name" required>
-
-        <label>Last Name</label>
-        <input type="text" name="Last Name" required>
-
-        <label>Phone Number</label>
-        <input type="tel" name="Phone" required>
-
-        <label>Email Address</label>
-        <input type="email" name="Email" required>
-
-        <label>VIP Seating</label>
-        <input type="number" name="VIP Passes" min="0" value="0">
-
-        <label>Standard Seating</label>
-        <input type="number" name="GA Tickets" min="0" value="0">
-
         <input type="hidden" name="Total Amt Due" id="hidden-total">
 
-        <button type="submit" id="submitBtn">CONFIRM RSVP</button>
+        <label>First Name</label>
+        <input type="text" name="First Name" required placeholder="Enter first name">
 
-        <div id="msg"></div>
+        <label>Last Name</label>
+        <input type="text" name="Last Name" required placeholder="Enter last name">
+
+        <label>Phone Number</label>
+        <input type="tel" name="Phone" required placeholder="Your mobile number">
+
+        <label>Email Address</label>
+        <input type="email" name="Email" required placeholder="yourname@email.com">
+
+        <label>Standard Tickets</label>
+        <select name="GA Tickets">
+            <option value="0">0</option>
+            <option value="1" selected>1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+        </select>
+
+        <label>VIP Passes</label>
+        <select name="VIP Passes">
+            <option value="0" selected>0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+        </select>
+
+        <button type="submit" id="submitBtn">CONFIRM RSVP</button>
+    </form>
+
+    <div id="msg"></div>
 
     <div class="box-office">
-    <h3>Payment Required for Entry</h3>
-
-    <div style="margin-bottom: 15px; font-size: 1.1rem; letter-spacing: 1px;">
-        TOTAL DUE: 
-        <span id="total-display" style="color: #d80000; font-family: 'Courier New', monospace; font-size: 1.8rem; font-weight: bold;">$0</span>
-    </div>
-    
-    <div class="zelle-card">
-        <img src="IMG_6017_Small.png" alt="Zelle QR Code" class="qr-image" style="width: 1.5in; height: 2in;">
-        
-        <div class="zelle-details">
-            <span class="zelle-label">SCAN TO PAY VIA ZELLE</span>
-            <span class="zelle-name">Vimal Kumar</span>
-            <span class="zelle-number">478-918-4220</span>
+        <h3>Payment Required for Entry</h3>
+        <div style="margin-bottom: 15px; font-size: 1.1rem; letter-spacing: 1px;">
+            TOTAL DUE: 
+            <span id="total-display" style="color: #d80000; font-family: 'Courier New', monospace; font-size: 1.8rem; font-weight: bold;">$15</span>
         </div>
+        
+        <div class="zelle-card">
+            <img src="IMG_6017_Small.jpg" alt="Zelle QR Code" class="qr-image" style="width: 1.5in; height: 2in; display: block; margin: 0 auto;">
+            <div class="zelle-details">
+                <span class="zelle-label">SCAN TO PAY VIA ZELLE</span>
+                <span class="zelle-name">Vimal Kumar</span>
+                <span class="zelle-number">478-918-4220</span>
+            </div>
+        </div>
+        
+        <p style="font-size: 0.75rem; color: #888; margin-top: 15px; font-style: italic;">
+            *Please complete payment to secure your seats.
+        </p>
     </div>
-    
-    <p style="font-size: 0.75rem; color: #888; margin-top: 15px; font-style: italic;">
-        *Please complete payment to secure your seats.
-    </p>
 </div>
 
 <div class="container hidden" id="success-card">
@@ -268,11 +290,11 @@
 
 <script>
     // -------------------------------------------------------------
-    // REPLACE WITH YOUR GOOGLE APPS SCRIPT URL
+    // PASTE YOUR GOOGLE WEB APP URL INSIDE THE QUOTES BELOW
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzLoKlnAMKtW6zoNErArSMJWQedXm88nvUunUCVTyqc3Rr0bcy6fP8ewJQjqKr-k-BO/exec';
     // -------------------------------------------------------------
 
-   const form = document.forms['submit-to-google-sheet'];
+    const form = document.forms['submit-to-google-sheet'];
     const msg = document.getElementById("msg");
     const btn = document.getElementById("submitBtn");
     
